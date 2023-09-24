@@ -16,7 +16,3 @@ class User:
 user = User(name="John", birthyear=1999)
 print(user.age(2023))
 print(user.get_name())
-
-
-    
-    
