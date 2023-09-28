@@ -1,5 +1,6 @@
 import pandas as pd
 import uuid
+from abc import ABC, abstractmethod
 
 df = pd.read_csv("documents/hotels.csv", dtype={"id": str})
 
@@ -32,12 +33,27 @@ class Hotel:
         """Class method = related to a class but not specifically tied to an instance. Note best practice: cls argument"""
         return len(data)
     
+    def __eq__(self, other) -> bool:
+        if self.hotel_id == other.hotel_id:
+            return True
+        
+    def __add__(self, other) -> float:
+        total = self.price + other.price
+        return total
+    
 
-class ReservationTicket:
+class Ticket(ABC):
+    """ABC = Abstract Based Class"""
+    
+    @abstractmethod
+    def generate(self):
+        pass
+
+class ReservationTicket(Ticket):
     def __init__(self, customer_name, hotel_object) -> None:
         self.customer_name = customer_name
         self.hotel = hotel_object
-    
+        
     def generate(self) -> str:
         """Generate a unique code for both the guest and the hotel - send an email to the guest and hotel with the unique code"""
         random_code = uuid.uuid4().hex.upper()[0:5]
@@ -62,6 +78,12 @@ class ReservationTicket:
     def convert(amount):
         """Typically used for utilities, often less associated than classmethods"""
         return amount * 1.2
+    
+
+class DigitalTicket(ReservationTicket):
+    def generate(self) -> str:
+        return "<Digital Ticket>"
+    
         
     
 hotel1 = Hotel(hotel_id="188")
